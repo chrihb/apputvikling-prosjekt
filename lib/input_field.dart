@@ -16,9 +16,7 @@ class _InputField extends State<InputField> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: TextField(
+    return TextField(
         decoration: const InputDecoration(
           labelText: 'Add item',
           border: OutlineInputBorder(),
@@ -26,7 +24,6 @@ class _InputField extends State<InputField> {
         onSubmitted: (value) {
           handleSubmit(value);
         },
-      )
     );
   }
 }

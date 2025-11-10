@@ -1,8 +1,8 @@
 import 'package:apputvikling_prosjekt/input_field.dart';
+import 'package:apputvikling_prosjekt/todo_item.dart';
 import 'package:apputvikling_prosjekt/top_bar.dart';
 import 'package:flutter/material.dart';
-
-import 'item_field.dart';
+import 'item_list.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,6 +32,29 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final List<TodoItem> itemList = [
+    TodoItem('Milk', false),
+    TodoItem('Eggs', true),
+    TodoItem('Bread', false),
+    TodoItem('Butter', false),
+    TodoItem('Coffee', true),
+    TodoItem('Pasta', false),
+    TodoItem('Tomato Sauce', true),
+    TodoItem('Apples', false),
+    TodoItem('Bananas', false),
+    TodoItem('Orange Juice', true),
+    TodoItem('Cheese', false),
+    TodoItem('Yogurt', true),
+    TodoItem('Chicken', false),
+    TodoItem('Rice', false),
+    TodoItem('Beans', true),
+    TodoItem('Cereal', false),
+    TodoItem('Toothpaste', true),
+    TodoItem('Soap', false),
+    TodoItem('Shampoo', false),
+    TodoItem('Detergent', true),
+  ];
+
 
   @override
   Widget build(BuildContext context) {
@@ -40,17 +63,26 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(bottom: 32, top: 16),
+      body: SafeArea(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            TopBar(),
-            ItemField(),
-            InputField()
+            const Padding(
+              padding: EdgeInsets.all(16),
+              child: TopBar(),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: ItemList(items: itemList), // internally scrollable
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
+              child: InputField(),
+            ),
           ],
         ),
-      )
+      ),
     );
   }
 }

@@ -34,22 +34,21 @@ enum ListEntries {
 class _TopBarState extends State<TopBar> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Row(
+    final double width = MediaQuery.of(context).size.width * 0.45;
+
+    return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         spacing: 16,
         children: [
-          Expanded(
-            flex: 6,
+          SizedBox(
+            width: width,
             child: DropdownMenu(
+              width: width,
               dropdownMenuEntries: ListEntries.entries,
               initialSelection: ListEntries.item1,
-              width: double.infinity,
             ),
           ),
           Expanded(
-            flex: 5,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               spacing: 8,
@@ -61,7 +60,6 @@ class _TopBarState extends State<TopBar> {
             ),
           ),
         ],
-      ),
     );
   }
 }
