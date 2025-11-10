@@ -1,9 +1,20 @@
 import 'package:flutter/foundation.dart';
 
 class TodoItem {
-  final String id = UniqueKey().toString();
+  String id;
   String label;
   bool done;
 
-  TodoItem(this.label, this.done);
+  TodoItem(this.label, this.done) : id = UniqueKey().toString();
+
+  TodoItem.fromJson(Map<String, dynamic> json)
+      : id = json['id'],
+        label = json['label'],
+        done = json['done'];
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'label': label,
+    'done': done,
+  };
 }

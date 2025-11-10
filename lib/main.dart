@@ -1,4 +1,5 @@
 import 'package:apputvikling_prosjekt/input_field.dart';
+import 'package:apputvikling_prosjekt/storage.dart';
 import 'package:apputvikling_prosjekt/todo_item.dart';
 import 'package:apputvikling_prosjekt/top_bar.dart';
 import 'package:flutter/material.dart';
@@ -33,28 +34,22 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<TodoItem> itemList = [
-    TodoItem('Milk', false),
-    TodoItem('Eggs', true),
-    TodoItem('Bread', false),
-    TodoItem('Butter', false),
-    TodoItem('Coffee', true),
-    TodoItem('Pasta', false),
-    TodoItem('Tomato Sauce', true),
-    TodoItem('Apples', false),
-    TodoItem('Bananas', false),
-    TodoItem('Orange Juice', true),
-    TodoItem('Cheese', false),
-    TodoItem('Yogurt', true),
-    TodoItem('Chicken', false),
-    TodoItem('Rice', false),
-    TodoItem('Beans', true),
-    TodoItem('Cereal', false),
-    TodoItem('Toothpaste', true),
-    TodoItem('Soap', false),
-    TodoItem('Shampoo', false),
-    TodoItem('Detergent', true),
-  ];
+
+  Map<String, List<TodoItem>> allLists = {};
+  String currentList = 'My To-Do List';
+
+  @override
+  void initState() {
+    super.initState();
+    Storage.loadAll().then((loaded) {
+      setState(() {
+        allLists = loaded;
+        allLists.putIfAbsent(currentList, () => []);
+      });
+    });
+  }
+
+  void saveAll() => Storage.saveAll(allLists);
 
 
   @override
@@ -63,16 +58,30 @@ class _MyHomePageState extends State<MyHomePage> {
       body: SafeArea(
         child: Column(
           children: [
-            const Padding(
-              padding: EdgeInsets.all(16),
-              child: TopBar(),
+            // 🔹 Remove 'const' because we pass a callback
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: TopBar(
+                lists: allLists.keys.toList(),
+                currentList: currentList,
+                onListChanged: (selected) {
+                  setState(() {
+                    currentList = selected;
+                    allLists.putIfAbsent(selected, () => []);
+                  });
+                },
+              ),
             ),
+
+            // 🔹 Main item list
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: ItemList(items: itemList),
+                child: ItemList(items: allLists[currentList] ?? []),
               ),
             ),
+
+            // 🔹 Input field at the bottom
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
               child: InputField(),
