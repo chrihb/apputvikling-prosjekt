@@ -1,20 +1,29 @@
 import 'package:flutter/material.dart';
 
 class SquareButton extends StatelessWidget {
-  const SquareButton({super.key, required this.icon});
+  const SquareButton({super.key, required this.icon, this.onPressed});
 
   final Icon icon;
-
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
     return Expanded(
       child: AspectRatio(
         aspectRatio: 1,
         child: ElevatedButton(
-          onPressed: () {},
-          style: ButtonStyle(
-            padding: WidgetStateProperty.all(EdgeInsets.zero),
+          onPressed: onPressed ?? () {},
+          style: ElevatedButton.styleFrom(
+            elevation: 2,
+            backgroundColor: scheme.surfaceContainerHigh,
+            foregroundColor: scheme.onSurface,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            padding: EdgeInsets.zero,
+            shadowColor: scheme.shadow.withValues(alpha: 0.3),
           ),
           child: icon,
         ),
@@ -22,6 +31,3 @@ class SquareButton extends StatelessWidget {
     );
   }
 }
-
-
-

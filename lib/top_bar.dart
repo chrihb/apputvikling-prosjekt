@@ -34,21 +34,48 @@ enum ListEntries {
 class _TopBarState extends State<TopBar> {
   @override
   Widget build(BuildContext context) {
-    final double width = MediaQuery.of(context).size.width * 0.45;
+    final width = MediaQuery.of(context).size.width * 0.45;
+
 
     return Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         spacing: 16,
         children: [
-          SizedBox(
-            width: width,
-            child: DropdownMenu(
-              width: width,
-              dropdownMenuEntries: ListEntries.entries,
-              initialSelection: ListEntries.item1,
+      SizedBox(
+      width: width,
+      child: DropdownMenu<ListEntries>(
+        width: width,
+        dropdownMenuEntries: ListEntries.entries,
+        initialSelection: ListEntries.item1,
+        textStyle: Theme.of(context).textTheme.bodyMedium,
+        inputDecorationTheme: InputDecorationTheme(
+          filled: true,
+          fillColor: Theme.of(context).colorScheme.surfaceContainerHigh,
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: BorderSide.none,
+          ),
+        ),
+        menuStyle: MenuStyle(
+          padding: const WidgetStatePropertyAll(EdgeInsets.zero),
+          maximumSize: WidgetStatePropertyAll(Size(width, double.infinity)),
+          backgroundColor: WidgetStatePropertyAll(
+            Theme.of(context).colorScheme.surfaceContainerHigh,
+          ),
+          elevation: const WidgetStatePropertyAll(3),
+          shape: WidgetStatePropertyAll(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
             ),
           ),
-          Expanded(
+          shadowColor: WidgetStatePropertyAll(
+            Theme.of(context).colorScheme.shadow.withValues(alpha: 0.3),
+          ),
+        ),
+      ),
+    ),
+    Expanded(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               spacing: 8,

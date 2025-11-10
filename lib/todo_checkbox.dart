@@ -2,7 +2,12 @@ import 'package:apputvikling_prosjekt/todo_item.dart';
 import 'package:flutter/material.dart';
 
 class TodoCheckbox extends StatelessWidget {
-  const TodoCheckbox({super.key, required this.item, required this.list, required this.onChanged,});
+  const TodoCheckbox({
+    super.key,
+    required this.item,
+    required this.list,
+    required this.onChanged,
+  });
 
   final List<TodoItem> list;
   final TodoItem item;
@@ -10,34 +15,46 @@ class TodoCheckbox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Checkbox(
-          value: item.done,
-          onChanged: (v) {
-            item.done = v!;
-            onChanged();
-          },
-        ),
-        Expanded(
-          child: Text(
-            item.label,
-            style: TextStyle(
-              decoration:
-              item.done ? TextDecoration.lineThrough : TextDecoration.none,
-              color: item.done ? Colors.grey : null,
-            ),
-          ),
-        ),
-        if (item.done)
-          IconButton(
-            onPressed: () {
-              list.remove(item);
+    final scheme = Theme.of(context).colorScheme;
+    final iconColor = scheme.onSurface;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2),
+      child: Row(
+        children: [
+          Checkbox(
+            value: item.done,
+            activeColor: iconColor,
+            checkColor: scheme.surface,
+            onChanged: (v) {
+              item.done = v!;
               onChanged();
             },
-            icon: const Icon(Icons.delete),
           ),
-      ],
+          Expanded(
+            child: Text(
+              item.label,
+              style: TextStyle(
+                fontSize: 16,
+                decoration: item.done
+                    ? TextDecoration.lineThrough
+                    : TextDecoration.none,
+                color: item.done
+                    ? scheme.onSurfaceVariant
+                    : scheme.onSurface,
+              ),
+            ),
+          ),
+          if (item.done)
+            IconButton(
+              onPressed: () {
+                list.remove(item);
+                onChanged();
+              },
+              icon: Icon(Icons.delete, color: iconColor),
+            ),
+        ],
+      ),
     );
   }
 }

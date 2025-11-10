@@ -62,11 +62,25 @@ class _ItemListState extends State<ItemList> {
             physics: const NeverScrollableScrollPhysics(),
             children: [
               for (final item in checked)
-                TodoCheckbox(
+                AnimatedSwitcher(
                   key: ValueKey(item.id),
-                  item: item,
-                  list: widget.items,
-                  onChanged: () => setState(() {}),
+                  duration: const Duration(milliseconds: 200),
+                  transitionBuilder: (child, animation) => FadeTransition(
+                    opacity: animation,
+                    child: SlideTransition(
+                      position: Tween<Offset>(
+                        begin: const Offset(0.1, 0),
+                        end: Offset.zero,
+                      ).animate(animation),
+                      child: child,
+                    ),
+                  ),
+                  child: TodoCheckbox(
+                    key: ValueKey('${item.id}-${item.done}'),
+                    item: item,
+                    list: widget.items,
+                    onChanged: () => setState(() {}),
+                  ),
                 ),
             ],
           ),
