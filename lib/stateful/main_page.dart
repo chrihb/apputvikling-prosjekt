@@ -1,15 +1,18 @@
-import 'package:apputvikling_prosjekt/data/todo_item.dart';
-import 'package:apputvikling_prosjekt/stateless/input_field.dart';
-import 'package:apputvikling_prosjekt/stateless/item_list.dart';
-import 'package:apputvikling_prosjekt/stateless/popup.dart';
-import 'package:apputvikling_prosjekt/stateless/top_bar.dart';
-import 'package:apputvikling_prosjekt/util/storage.dart';
 import 'package:flutter/material.dart';
 
-import '../data/todo_data.dart';
-import '../data/todo_list.dart';
+import '../model/todo_data.dart';
+import '../model/todo_item.dart';
+import '../model/todo_list.dart';
+import '../stateless/input_field.dart';
+import '../stateless/item_list.dart';
+import '../stateless/popup.dart';
+import '../stateless/top_bar.dart';
 import '../util/seeder.dart';
+import '../util/storage.dart';
 
+// Main page of the application.
+// This is the only stateful widget in the application,
+// which keeps all the logic in one place
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
 
@@ -23,6 +26,7 @@ class _MainPageState extends State<MainPage> {
 
   TodoData data = TodoData(lists: []);
 
+  // Getter for current list
   TodoList? get currentList {
     if (data.lists.isEmpty) return null;
     return data.lists.firstWhere(
@@ -30,8 +34,6 @@ class _MainPageState extends State<MainPage> {
       orElse: () => data.lists.first,
     );
   }
-
-  void saveAll() => Storage.saveAll(data);
 
   @override
   void initState() {
@@ -47,6 +49,8 @@ class _MainPageState extends State<MainPage> {
     focusNode.dispose();
     super.dispose();
   }
+
+  void saveAll() => Storage.saveAll(data);
 
   Future<void> handleSubmit(String value) async {
     final input = value.trim();
@@ -65,7 +69,7 @@ class _MainPageState extends State<MainPage> {
     var uniqueName = baseName;
     int counter = 2;
 
-    // Keep incrementing until the name is unique
+    // Keeps incrementing until the name is unique
     while (data.lists.any((l) => l.name == uniqueName)) {
       uniqueName = '$baseName$counter';
       counter++;
@@ -90,7 +94,7 @@ class _MainPageState extends State<MainPage> {
   Future<void> deleteList(TodoList list) async {
     if (data.lists.length <= 1) {
       // If this was the last list, reset to the seed
-      await Storage.justSeed(Seeder.onLastDelete);
+      await Storage.overwriteSeed(Seeder.onLastDelete);
       final seeded = await Storage.loadAll();
 
       setState(() {
@@ -106,7 +110,34 @@ class _MainPageState extends State<MainPage> {
     saveAll();
   }
 
-  // ─────────────── BUILD UI ───────────────
+  void handleReorder(int oldIndex, int newIndex) {
+    if (currentList == null) return;
+    if (newIndex > oldIndex) newIndex -= 1;
+
+    final full = currentList!.items;
+
+    // Gets positions and items of the unchecked subset
+    final uncheckedPositions = <int>[];
+    final uncheckedItems = <TodoItem>[];
+    for (int i = 0; i < full.length; i++) {
+      if (!full[i].done) {
+        uncheckedPositions.add(i);
+        uncheckedItems.add(full[i]);
+      }
+    }
+
+    // Reorders inside the subset.
+    final moved = uncheckedItems.removeAt(oldIndex);
+    uncheckedItems.insert(newIndex, moved);
+
+    // Write the reordered subset back into the full list.
+    for (int j = 0; j < uncheckedPositions.length; j++) {
+      full[uncheckedPositions[j]] = uncheckedItems[j];
+    }
+
+    setState(() {});
+    saveAll();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -159,34 +190,8 @@ class _MainPageState extends State<MainPage> {
                   child: ItemList(
                     items: currentList?.items ?? [],
                     onReorder: (oldIndex, newIndex) {
-                      if (currentList == null) return;
-                      if (newIndex > oldIndex) newIndex -= 1;
-
-                      final full = currentList!.items;
-
-                      // 1) Capture positions and items of the unchecked subset (as shown).
-                      final uncheckedPositions = <int>[];
-                      final uncheckedItems = <TodoItem>[];
-                      for (int i = 0; i < full.length; i++) {
-                        if (!full[i].done) {
-                          uncheckedPositions.add(i);
-                          uncheckedItems.add(full[i]);
-                        }
-                      }
-
-                      // 2) Reorder inside the subset.
-                      final moved = uncheckedItems.removeAt(oldIndex);
-                      uncheckedItems.insert(newIndex, moved);
-
-                      // 3) Write the reordered subset back into the full list.
-                      for (int j = 0; j < uncheckedPositions.length; j++) {
-                        full[uncheckedPositions[j]] = uncheckedItems[j];
-                      }
-
-                      setState(() {});
-                      saveAll();
+                      handleReorder(oldIndex, newIndex);
                     },
-
                     onChanged: () {
                       saveAll();
                       setState(() {});

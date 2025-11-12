@@ -1,7 +1,10 @@
-import 'package:apputvikling_prosjekt/stateless/todo_checkbox.dart';
-import 'package:apputvikling_prosjekt/data/todo_item.dart';
 import 'package:flutter/material.dart';
 
+import '../model/todo_item.dart';
+import '../stateless/todo_checkbox.dart';
+
+// Displays the items in the selected list.
+// Uses two separate lists to separate between checked and unchecked items
 class ItemList extends StatelessWidget {
   const ItemList({
     super.key,

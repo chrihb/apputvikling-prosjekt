@@ -1,7 +1,8 @@
-import 'package:apputvikling_prosjekt/stateful/main_page.dart';
 import 'package:flutter/material.dart';
 
+import '../stateful/main_page.dart';
 
+// Main widget for the application. Runs the Main Page
 class App extends StatelessWidget {
   const App({super.key});
   @override

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// General purpose square button. Used in top bar
 class SquareButton extends StatelessWidget {
   const SquareButton({super.key, required this.icon, this.onPressed});
 

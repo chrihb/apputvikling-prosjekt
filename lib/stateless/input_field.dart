@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// Input field of the application
 class InputField extends StatelessWidget {
   const InputField({
     super.key,
@@ -27,7 +28,10 @@ class InputField extends StatelessWidget {
         labelStyle: TextStyle(color: scheme.onSurfaceVariant),
         filled: true,
         fillColor: scheme.surfaceContainerHigh,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 14,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
           borderSide: BorderSide.none,
@@ -40,4 +44,3 @@ class InputField extends StatelessWidget {
     );
   }
 }
-

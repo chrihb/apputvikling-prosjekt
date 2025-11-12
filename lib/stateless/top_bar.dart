@@ -1,7 +1,9 @@
-import 'package:apputvikling_prosjekt/data/todo_list.dart';
-import 'package:apputvikling_prosjekt/stateless/square_button.dart';
 import 'package:flutter/material.dart';
 
+import '../model/todo_list.dart';
+import '../stateless/square_button.dart';
+
+// The top bar of the application. Hosts the dropdown and list buttons
 class TopBar extends StatelessWidget {
   const TopBar({
     super.key,
@@ -44,8 +46,10 @@ class TopBar extends StatelessWidget {
             inputDecorationTheme: InputDecorationTheme(
               filled: true,
               fillColor: scheme.surfaceContainerHigh,
-              contentPadding:
-              const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 12,
+              ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
                 borderSide: BorderSide.none,
@@ -54,8 +58,9 @@ class TopBar extends StatelessWidget {
             menuStyle: MenuStyle(
               padding: const WidgetStatePropertyAll(EdgeInsets.zero),
               maximumSize: WidgetStatePropertyAll(Size(width, double.infinity)),
-              backgroundColor:
-              WidgetStatePropertyAll(scheme.surfaceContainerHigh),
+              backgroundColor: WidgetStatePropertyAll(
+                scheme.surfaceContainerHigh,
+              ),
               elevation: const WidgetStatePropertyAll(3),
               shape: WidgetStatePropertyAll(
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -67,15 +72,24 @@ class TopBar extends StatelessWidget {
           ),
         ),
 
-        // ─────────────── Action buttons ───────────────
+
         Expanded(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             spacing: 8,
             children: [
-              SquareButton(icon: const Icon(Icons.edit), onPressed: onRenameList),
-              SquareButton(icon: const Icon(Icons.add), onPressed: onCreateList),
-              SquareButton(icon: const Icon(Icons.delete), onPressed: onDeleteList),
+              SquareButton(
+                icon: const Icon(Icons.edit),
+                onPressed: onRenameList,
+              ),
+              SquareButton(
+                icon: const Icon(Icons.add),
+                onPressed: onCreateList,
+              ),
+              SquareButton(
+                icon: const Icon(Icons.delete),
+                onPressed: onDeleteList,
+              ),
             ],
           ),
         ),

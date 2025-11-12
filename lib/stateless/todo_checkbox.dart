@@ -1,6 +1,8 @@
-import 'package:apputvikling_prosjekt/data/todo_item.dart';
 import 'package:flutter/material.dart';
 
+import '../model/todo_item.dart';
+
+// General purpose checkbox
 class TodoCheckbox extends StatelessWidget {
   const TodoCheckbox({
     super.key,
@@ -46,13 +48,11 @@ class TodoCheckbox extends StatelessWidget {
                   decoration: item.done
                       ? TextDecoration.lineThrough
                       : TextDecoration.none,
-                  color: item.done
-                      ? scheme.onSurfaceVariant
-                      : scheme.onSurface,
+                  color: item.done ? scheme.onSurfaceVariant : scheme.onSurface,
                 ),
               ),
             ),
-            // Important: keep delete button separately targetable
+
             if (item.done)
               InkWell(
                 borderRadius: BorderRadius.circular(8),

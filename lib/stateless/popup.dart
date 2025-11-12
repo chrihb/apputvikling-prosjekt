@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
 
+// General purpose popup class
 class Popup extends StatelessWidget {
+  // Constructor for creating a message popup
   const Popup.message({
     super.key,
     required this.title,
     required this.message,
     this.onConfirm,
-  })  : textController = null,
-        onTextConfirm = null,
-        isInput = false;
+  }) : textController = null,
+       onTextConfirm = null,
+       isInput = false;
 
+  // Constructor for creating an input popup
   const Popup.input({
     super.key,
     required this.title,
     required this.textController,
     this.onTextConfirm,
-  })  : message = null,
-        onConfirm = null,
-        isInput = true;
+  }) : message = null,
+       onConfirm = null,
+       isInput = true;
 
   final String title;
   final String? message;
@@ -27,30 +30,27 @@ class Popup extends StatelessWidget {
 
   final bool isInput;
 
-  // ─────────────── Message popup ───────────────
+  // Function call for creating a message popup
   static Future<void> showMessage(
-      BuildContext context, {
-        required String title,
-        required String message,
-        VoidCallback? onConfirm,
-      }) {
+    BuildContext context, {
+    required String title,
+    required String message,
+    VoidCallback? onConfirm,
+  }) {
     return showDialog<void>(
       context: context,
-      builder: (_) => Popup.message(
-        title: title,
-        message: message,
-        onConfirm: onConfirm,
-      ),
+      builder: (_) =>
+          Popup.message(title: title, message: message, onConfirm: onConfirm),
     );
   }
 
-  // ─────────────── Input popup ───────────────
+  // Function call for creating an input popup
   static Future<void> showInput(
-      BuildContext context, {
-        required String title,
-        required TextEditingController controller,
-        required void Function(String value) onConfirm,
-      }) {
+    BuildContext context, {
+    required String title,
+    required TextEditingController controller,
+    required void Function(String value) onConfirm,
+  }) {
     return showDialog<void>(
       context: context,
       builder: (_) => Popup.input(
@@ -61,7 +61,6 @@ class Popup extends StatelessWidget {
     );
   }
 
-  // ─────────────── UI ───────────────
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
@@ -77,29 +76,34 @@ class Popup extends StatelessWidget {
       ),
       content: isInput
           ? TextField(
-        controller: textController,
-        decoration: InputDecoration(
-          hintText: 'List Name',
-          filled: true,
-          fillColor: scheme.surfaceContainerHigh,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide.none,
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: scheme.primary),
-          ),
-        ),
-      )
+              controller: textController,
+              decoration: InputDecoration(
+                hintText: 'List Name',
+                filled: true,
+                fillColor: scheme.surfaceContainerHigh,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none,
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: scheme.primary),
+                ),
+              ),
+            )
           : Text(
-        message ?? '',
-        style: textTheme.bodyMedium?.copyWith(color: scheme.onSurfaceVariant),
-      ),
+              message ?? '',
+              style: textTheme.bodyMedium?.copyWith(
+                color: scheme.onSurfaceVariant,
+              ),
+            ),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: Text("Cancel", style: TextStyle(color: scheme.onSurfaceVariant)),
+          child: Text(
+            "Cancel",
+            style: TextStyle(color: scheme.onSurfaceVariant),
+          ),
         ),
         FilledButton(
           onPressed: () {

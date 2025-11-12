@@ -1,13 +1,11 @@
 import 'todo_list.dart';
 
+// Model Wrapper
 class TodoData {
   List<TodoList> lists;
   String? currentListId;
 
-  TodoData({
-    required this.lists,
-    this.currentListId,
-  });
+  TodoData({required this.lists, this.currentListId});
 
   Map<String, dynamic> toJson() => {
     'currentListId': currentListId,
