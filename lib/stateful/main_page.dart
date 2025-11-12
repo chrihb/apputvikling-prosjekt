@@ -24,7 +24,9 @@ class _MainPageState extends State<MainPage> {
   final controller = TextEditingController();
   final focusNode = FocusNode();
 
+
   TodoData data = TodoData(lists: []);
+
 
   // Getter for current list
   TodoList? get currentList {
@@ -41,6 +43,7 @@ class _MainPageState extends State<MainPage> {
     Storage.loadAllOrSeed(Seeder.defaultSeed).then((loaded) {
       setState(() => data = loaded);
     });
+    debugPrint("State initialized");
   }
 
   @override
@@ -62,6 +65,7 @@ class _MainPageState extends State<MainPage> {
     controller.clear();
 
     FocusScope.of(context).requestFocus(focusNode);
+    debugPrint("New item added");
   }
 
   void createList(String name) {
@@ -81,6 +85,7 @@ class _MainPageState extends State<MainPage> {
       data.currentListId = newList.id;
     });
     saveAll();
+    debugPrint("New list created");
   }
 
   void renameList(String newName) {
@@ -89,6 +94,7 @@ class _MainPageState extends State<MainPage> {
 
     setState(() => currentList!.name = trimmed);
     saveAll();
+    debugPrint("List renamed");
   }
 
   Future<void> deleteList(TodoList list) async {
@@ -108,6 +114,7 @@ class _MainPageState extends State<MainPage> {
       data.currentListId = data.lists.first.id;
     });
     saveAll();
+    debugPrint("List deleted");
   }
 
   void handleReorder(int oldIndex, int newIndex) {
@@ -137,6 +144,8 @@ class _MainPageState extends State<MainPage> {
 
     setState(() {});
     saveAll();
+
+    debugPrint("Reorder Successful");
   }
 
   @override

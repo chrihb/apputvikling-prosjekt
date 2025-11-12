@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
+import 'package:flutter/material.dart';
 
 import '../model/todo_data.dart';
 import '../model/todo_list.dart';
@@ -23,6 +24,7 @@ class Storage {
       if (await file.exists()) {
         final raw =
             jsonDecode(await file.readAsString()) as Map<String, dynamic>;
+        debugPrint("List loaded");
         return TodoData.fromJson(raw);
       }
     } catch (_) {}
@@ -33,6 +35,7 @@ class Storage {
   static Future<void> saveAll(TodoData data) async {
     final file = await _getFile();
     await file.writeAsString(jsonEncode(data.toJson()));
+    debugPrint("List saved");
   }
 
   // Used during init. Loads lists from storage, or seeds with default list
@@ -41,13 +44,16 @@ class Storage {
   ) async {
     final file = await _getFile();
     if (await file.exists()) {
+      debugPrint("File found, loading...");
       return loadAll();
     } else {
+      debugPrint("No file found, creating new...");
       final seed = TodoData(
         lists: seedFactory(),
         currentListId: seedFactory().first.id,
       );
       await saveAll(seed);
+      debugPrint("New file created");
       return seed;
     }
   }
@@ -59,5 +65,6 @@ class Storage {
 
     final file = await _getFile();
     await file.writeAsString(jsonEncode(seed.toJson()));
+    debugPrint("Last list deleted. New List generated");
   }
 }

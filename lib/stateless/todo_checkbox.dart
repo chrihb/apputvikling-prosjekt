@@ -38,6 +38,7 @@ class TodoCheckbox extends StatelessWidget {
               onChanged: (v) {
                 item.done = v!;
                 onChanged();
+                debugPrint("Item changed");
               },
             ),
             Expanded(
@@ -60,6 +61,7 @@ class TodoCheckbox extends StatelessWidget {
                   FocusScope.of(context).unfocus();
                   list.remove(item);
                   onChanged();
+                  debugPrint("Item Removed");
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(6.0),
