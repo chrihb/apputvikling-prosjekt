@@ -1,51 +1,46 @@
-import 'package:apputvikling_prosjekt/todo_checkbox.dart';
-import 'package:apputvikling_prosjekt/todo_item.dart';
+import 'package:apputvikling_prosjekt/stateless/todo_checkbox.dart';
+import 'package:apputvikling_prosjekt/data/todo_item.dart';
 import 'package:flutter/material.dart';
 
-class ItemList extends StatefulWidget {
-  const ItemList({super.key, required this.items});
+class ItemList extends StatelessWidget {
+  const ItemList({
+    super.key,
+    required this.items,
+    required this.onReorder,
+    required this.onChanged,
+  });
+
   final List<TodoItem> items;
+  final void Function(int oldIndex, int newIndex) onReorder;
+  final VoidCallback onChanged;
 
-  @override
-  State<ItemList> createState() => _ItemListState();
-}
-
-class _ItemListState extends State<ItemList> {
   @override
   Widget build(BuildContext context) {
-    final unchecked = widget.items.where((e) => !e.done).toList();
-    final checked = widget.items.where((e) => e.done).toList();
+    final unchecked = items.where((e) => !e.done).toList();
+    final checked = items.where((e) => e.done).toList();
 
     return ListView(
       shrinkWrap: true,
       children: [
-        // 🔹 Unchecked section (Reorderable)
         AnimatedSize(
           duration: const Duration(milliseconds: 200),
           alignment: Alignment.topCenter,
           child: ReorderableListView(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            onReorder: (oldIndex, newIndex) {
-              setState(() {
-                if (newIndex > oldIndex) newIndex--;
-                final item = unchecked.removeAt(oldIndex);
-                unchecked.insert(newIndex, item);
-              });
-            },
+            onReorder: onReorder,
             children: [
               for (final item in unchecked)
                 TodoCheckbox(
-                  key: ValueKey(item.id), // unique id prevents flicker
+                  key: ValueKey(item.id),
                   item: item,
-                  list: widget.items,
-                  onChanged: () => setState(() {}),
+                  list: items,
+                  onChanged: onChanged,
                 ),
             ],
           ),
         ),
 
-        // 🔹 Animated divider between sections
         AnimatedSwitcher(
           duration: const Duration(milliseconds: 200),
           child: (unchecked.isNotEmpty && checked.isNotEmpty)
@@ -53,7 +48,6 @@ class _ItemListState extends State<ItemList> {
               : const SizedBox.shrink(key: ValueKey('no-divider')),
         ),
 
-        // 🔹 Checked section (non-reorderable)
         AnimatedSize(
           duration: const Duration(milliseconds: 200),
           alignment: Alignment.topCenter,
@@ -78,8 +72,8 @@ class _ItemListState extends State<ItemList> {
                   child: TodoCheckbox(
                     key: ValueKey('${item.id}-${item.done}'),
                     item: item,
-                    list: widget.items,
-                    onChanged: () => setState(() {}),
+                    list: items,
+                    onChanged: onChanged,
                   ),
                 ),
             ],

@@ -1,20 +1,11 @@
 import 'package:flutter/material.dart';
 
-class InputField extends StatefulWidget {
-  const InputField({super.key});
+class InputField extends StatelessWidget {
+  const InputField({super.key, required this.handleSubmit, required this.controller});
 
-  @override
-  State<InputField> createState() => _InputFieldState();
-}
 
-class _InputFieldState extends State<InputField> {
-  final controller = TextEditingController();
-
-  void handleSubmit(String value) {
-    if (value.trim().isEmpty) return;
-    // TODO: handle new item addition
-    controller.clear();
-  }
+  final void Function(String value) handleSubmit;
+  final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +20,7 @@ class _InputFieldState extends State<InputField> {
         labelText: 'Add item',
         labelStyle: TextStyle(color: scheme.onSurfaceVariant),
         filled: true,
-        fillColor: scheme.surfaceContainerHigh, // same as dropdown background
+        fillColor: scheme.surfaceContainerHigh,
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),

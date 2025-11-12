@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
-import 'package:apputvikling_prosjekt/todo_item.dart';
+import 'package:apputvikling_prosjekt/data/todo_item.dart';
 
 class Storage {
   static Future<File> _getFile() async {
@@ -30,6 +30,25 @@ class Storage {
     final data = allLists.map((key, list) =>
         MapEntry(key, list.map((e) => e.toJson()).toList()));
     await file.writeAsString(jsonEncode(data));
+  }
+
+  static Future<void> saveItem(String listName, TodoItem newItem) async {
+    final file = await _getFile();
+
+    if (!await file.exists()) return;
+
+    final raw = jsonDecode(await file.readAsString()) as Map<String, dynamic>;
+
+    if (!raw.containsKey(listName)) return;
+
+    final list = (raw[listName] as List)
+        .map((e) => TodoItem.fromJson(e as Map<String, dynamic>))
+        .toList();
+
+    list.add(newItem);
+
+    raw[listName] = list.map((e) => e.toJson()).toList();
+    await file.writeAsString(jsonEncode(raw));
   }
 }
 

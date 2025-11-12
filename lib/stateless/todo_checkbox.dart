@@ -1,4 +1,4 @@
-import 'package:apputvikling_prosjekt/todo_item.dart';
+import 'package:apputvikling_prosjekt/data/todo_item.dart';
 import 'package:flutter/material.dart';
 
 class TodoCheckbox extends StatelessWidget {
