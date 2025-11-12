@@ -1,16 +1,48 @@
-# apputvikling_prosjekt
-
-En Handleliste-Applikasjon
+# To-Do List
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+### Requirements
 
-A few resources to get you started if this is your first Flutter project:
+Flutter SDK: 3.35.7 used for development
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Android SDK: API level 36 ("Baklava")
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Device/Emulator: Pixel 9 (1080 × 2424, 6.24")
+
+System image: Google Play Intel x86_64 Atom System Image
+
+
+## Setup
+
+1. Clone the project
+
+```
+git clone https://github.com/chrihb/apputvikling-prosjekt.git
+cd apputvikling-prosjekt
+```
+
+
+2. Fetch dependencies
+
+
+```
+flutter clean
+flutter pub get
+```
+3. Start the emulator
+
+Open Android Studio → Device Manager
+
+Use a Pixel 9 virtual device
+
+System image: Google Play Intel x86_64 Atom (API 36)
+
+
+4. Launch the app
+
+```
+flutter run
+```
+
+or directly from Android Studio using the green Run arrow.
