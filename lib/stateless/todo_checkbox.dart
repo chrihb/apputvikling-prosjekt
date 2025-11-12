@@ -20,40 +20,54 @@ class TodoCheckbox extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),
-      child: Row(
-        children: [
-          Checkbox(
-            value: item.done,
-            activeColor: iconColor,
-            checkColor: scheme.surface,
-            onChanged: (v) {
-              item.done = v!;
-              onChanged();
-            },
-          ),
-          Expanded(
-            child: Text(
-              item.label,
-              style: TextStyle(
-                fontSize: 16,
-                decoration: item.done
-                    ? TextDecoration.lineThrough
-                    : TextDecoration.none,
-                color: item.done
-                    ? scheme.onSurfaceVariant
-                    : scheme.onSurface,
-              ),
-            ),
-          ),
-          if (item.done)
-            IconButton(
-              onPressed: () {
-                list.remove(item);
+      child: InkWell(
+        borderRadius: BorderRadius.circular(8),
+        onTap: () {
+          FocusScope.of(context).unfocus();
+          item.done = !item.done;
+          onChanged();
+        },
+        child: Row(
+          children: [
+            Checkbox(
+              value: item.done,
+              activeColor: iconColor,
+              checkColor: scheme.surface,
+              onChanged: (v) {
+                item.done = v!;
                 onChanged();
               },
-              icon: Icon(Icons.delete, color: iconColor),
             ),
-        ],
+            Expanded(
+              child: Text(
+                item.label,
+                style: TextStyle(
+                  fontSize: 16,
+                  decoration: item.done
+                      ? TextDecoration.lineThrough
+                      : TextDecoration.none,
+                  color: item.done
+                      ? scheme.onSurfaceVariant
+                      : scheme.onSurface,
+                ),
+              ),
+            ),
+            // Important: keep delete button separately targetable
+            if (item.done)
+              InkWell(
+                borderRadius: BorderRadius.circular(8),
+                onTap: () {
+                  FocusScope.of(context).unfocus();
+                  list.remove(item);
+                  onChanged();
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(6.0),
+                  child: Icon(Icons.delete, color: iconColor),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }

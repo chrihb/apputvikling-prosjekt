@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
-import 'package:apputvikling_prosjekt/data/todo_item.dart';
+import '../data/todo_list.dart';
+import '../data/todo_data.dart';
 
 class Storage {
   static Future<File> _getFile() async {
@@ -9,46 +10,44 @@ class Storage {
     return File('${dir.path}/todos.json');
   }
 
-  static Future<Map<String, List<TodoItem>>> loadAll() async {
+  static Future<TodoData> loadAll() async {
     try {
       final file = await _getFile();
       if (await file.exists()) {
         final raw = jsonDecode(await file.readAsString()) as Map<String, dynamic>;
-        return raw.map((key, value) {
-          final list = (value as List)
-              .map((e) => TodoItem.fromJson(e as Map<String, dynamic>))
-              .toList();
-          return MapEntry(key, list);
-        });
+        return TodoData.fromJson(raw);
       }
     } catch (_) {}
-    return {};
+    return TodoData(lists: []);
   }
 
-  static Future<void> saveAll(Map<String, List<TodoItem>> allLists) async {
+  static Future<void> saveAll(TodoData data) async {
     final file = await _getFile();
-    final data = allLists.map((key, list) =>
-        MapEntry(key, list.map((e) => e.toJson()).toList()));
-    await file.writeAsString(jsonEncode(data));
+    await file.writeAsString(jsonEncode(data.toJson()));
   }
 
-  static Future<void> saveItem(String listName, TodoItem newItem) async {
+  static Future<TodoData> loadAllOrSeed(List<TodoList> Function() seedFactory) async {
     final file = await _getFile();
+    if (await file.exists()) {
+      return loadAll();
+    } else {
+      final seed = TodoData(
+        lists: seedFactory(),
+        currentListId: seedFactory().first.id,
+      );
+      await saveAll(seed);
+      return seed;
+    }
+  }
 
-    if (!await file.exists()) return;
+  static Future<void> justSeed(List<TodoList> Function() seedFactory) async {
+    final lists = seedFactory();
+    final seed = TodoData(
+      lists: lists,
+      currentListId: lists.first.id,
+    );
 
-    final raw = jsonDecode(await file.readAsString()) as Map<String, dynamic>;
-
-    if (!raw.containsKey(listName)) return;
-
-    final list = (raw[listName] as List)
-        .map((e) => TodoItem.fromJson(e as Map<String, dynamic>))
-        .toList();
-
-    list.add(newItem);
-
-    raw[listName] = list.map((e) => e.toJson()).toList();
-    await file.writeAsString(jsonEncode(raw));
+    final file = await _getFile();
+    await file.writeAsString(jsonEncode(seed.toJson()));
   }
 }
-

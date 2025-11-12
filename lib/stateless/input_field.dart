@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 
 class InputField extends StatelessWidget {
-  const InputField({super.key, required this.handleSubmit, required this.controller});
-
+  const InputField({
+    super.key,
+    required this.handleSubmit,
+    required this.controller,
+    required this.focusNode,
+  });
 
   final void Function(String value) handleSubmit;
   final TextEditingController controller;
+  final FocusNode focusNode;
 
   @override
   Widget build(BuildContext context) {
@@ -13,6 +18,7 @@ class InputField extends StatelessWidget {
 
     return TextField(
       controller: controller,
+      focusNode: focusNode,
       onSubmitted: handleSubmit,
       style: TextStyle(color: scheme.onSurface),
       cursorColor: scheme.primary,
@@ -34,3 +40,4 @@ class InputField extends StatelessWidget {
     );
   }
 }
+

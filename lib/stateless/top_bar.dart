@@ -1,3 +1,4 @@
+import 'package:apputvikling_prosjekt/data/todo_list.dart';
 import 'package:apputvikling_prosjekt/stateless/square_button.dart';
 import 'package:flutter/material.dart';
 
@@ -12,13 +13,12 @@ class TopBar extends StatelessWidget {
     required this.onDeleteList,
   });
 
-
   final VoidCallback onCreateList;
   final VoidCallback onRenameList;
   final VoidCallback onDeleteList;
-  final List<String> lists;
-  final String currentList;
-  final void Function(String listName) onListChanged;
+  final List<TodoList> lists;
+  final TodoList? currentList;
+  final void Function(TodoList list) onListChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -31,11 +31,11 @@ class TopBar extends StatelessWidget {
       children: [
         SizedBox(
           width: width,
-          child: DropdownMenu<String>(
+          child: DropdownMenu<TodoList>(
             initialSelection: currentList,
             width: width,
             dropdownMenuEntries: lists
-                .map((e) => DropdownMenuEntry(value: e, label: e))
+                .map((list) => DropdownMenuEntry(value: list, label: list.name))
                 .toList(),
             onSelected: (value) {
               if (value != null) onListChanged(value);
@@ -53,8 +53,7 @@ class TopBar extends StatelessWidget {
             ),
             menuStyle: MenuStyle(
               padding: const WidgetStatePropertyAll(EdgeInsets.zero),
-              maximumSize:
-              WidgetStatePropertyAll(Size(width, double.infinity)),
+              maximumSize: WidgetStatePropertyAll(Size(width, double.infinity)),
               backgroundColor:
               WidgetStatePropertyAll(scheme.surfaceContainerHigh),
               elevation: const WidgetStatePropertyAll(3),
@@ -68,7 +67,7 @@ class TopBar extends StatelessWidget {
           ),
         ),
 
-        // Action buttons
+        // ─────────────── Action buttons ───────────────
         Expanded(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
